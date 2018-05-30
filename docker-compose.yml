@@ -1,0 +1,99 @@
+version: '3'
+services:
+
+# Swallow Services
+  swallow-weewx:
+    build: ./swallow-weewx
+    volumes:
+     - ./swallow-weewx/weewx:/weewx
+     - ./swallow-weewx/swallow.py:/weewx/bin/weewx/drivers/swallow.py
+    container_name: swallow-weewx
+    devices:
+      - "/dev/swallow:/dev/swallow"
+    tty: true
+    environment:
+      TZ: "Europe/Moscow"
+    command: ["/weewx/bin/weewxd", "weewx/weewx.conf"]
+    depends_on:
+     - swallow-db
+
+  swallow-db:
+    container_name: swallow-db
+    image: mysql:5.7
+    volumes:
+      - ./swallow-db/my.cnf:/etc/mysql/my.cnf
+      - swallow-db-mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: VERYSECUREPASSWORD
+      MYSQL_DATABASE: weewx
+      MYSQL_USER: weewx
+      MYSQL_PASSWORD: weewx
+      TZ: "Europe/Moscow"
+
+  swallow-bot:
+    build: ./swallow-bot
+    container_name: swallow-bot
+    tty: true
+    depends_on:
+     - swallow-db
+
+# Bee services
+  bee-grafana:
+    image: grafana/grafana
+    container_name: bee-grafana
+    volumes:
+      - ./bee-grafana/grafana.db:/var/lib/grafana/grafana.db
+      - ./bee-grafana/index.html:/usr/share/grafana/public/views/index.html
+    environment:
+      - GF_SERVER_DOMAIN=bee-grafana
+      - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s/bee
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_NAME=Main Org.
+#      - GF_DATABASE_HOST=bee-db:3306
+#      - GF_DATABASE_NAME=beedb
+#      - GF_DATABASE_USER=beedb
+#      - GF_DATABASE_PASSWORD=beedb
+#      - GF_DATABASE_TYPE=mysql
+
+  bee-engine:
+    build: ./bee-engine
+    container_name: bee-engine
+    devices:
+      - "/dev/bee:/dev/ttyUSB0"
+    depends_on:
+     - bee-db
+
+  bee-db:
+    container_name: bee-db
+    image: mysql:5.7
+    volumes:
+      - ./bee-db/my.cnf:/etc/mysql/my.cnf
+      - bee-db-mysql-data:/var/lib/mysql
+    ports:
+      - 9999:3306
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=true
+      - MYSQL_DATABASE=beedb
+      - MYSQL_USER=beedb
+      - MYSQL_PASSWORD=beedb
+      - TZ="Europe/Moscow"
+
+# Common services
+  web-common:
+    container_name: web-common
+    build: ./web-common
+    volumes:
+      - ./web-common/default.conf:/etc/nginx/sites-enabled/default.conf
+      - ./web-common/main/_site:/var/www/html
+      - ./web-common/html/swallow:/var/www/html/swallow
+      - ./swallow-weewx/weewx/public_html/simple:/var/www/html/swallow/simple
+    ports:
+      - "80:80"
+    environment:
+      - "TZ=Europe/Moscow"
+
+volumes:
+  bee-db-mysql-data:
+    external: true
+  swallow-db-mysql-data:
+    external: true

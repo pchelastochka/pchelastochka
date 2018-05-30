@@ -1,0 +1,115 @@
+/* Menu style */
+
+ul {
+    all: revert;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    all: revert;
+    float: left;
+}
+
+li a, .dropbtn {
+    all: revert;
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover, .dropdown:hover .dropbtn {
+    all: revert;
+    background-color: #3366ff;
+}
+
+.dropdown {
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* main images-links style */
+.module {
+  background: 
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0),
+      rgba(0, 0, 0, 0.4));
+  width: 720px;
+  height: 300px;
+  position: relative;
+  overflow: hidden;
+  margin: auto;
+}
+
+.module-img {
+  width: 720px;
+  height: 300px;
+  position: relative;
+  overflow: hidden;
+  margin: auto;
+  -webkit-filter: blur(2px);
+  -moz-filter: blur(2px);
+  -o-filter: blur(2px);
+  -ms-filter: blur(2px);
+  filter: blur(2px);
+}
+.module-img:hover {
+  width: 720px;
+  height: 300px;
+  position: relative;
+  overflow: hidden;
+  margin: auto;
+  -webkit-filter: blur(0px);
+  -moz-filter: blur(0px);
+  -o-filter: blur(0px);
+  -ms-filter: blur(0px);
+  filter: blur(0px);
+}
+
+
+.module > header {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px 10px;
+}
+
+.module > header > h1 {
+  margin: 0;
+  color: white;
+  text-shadow: 0 1px 0 black;
+}
+
+* {
+  box-sizing: border-box;
+}
+

@@ -1,0 +1,5 @@
+# device symlink for swallow
+SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", ATTRS{serial}=="AL010POB", SYMLINK+="swallow"
+# device symlink for bee
+SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", ATTRS{serial}=="AI053G1S", SYMLINK+="bee"
+

@@ -1,0 +1,3 @@
+swallow-bot/.config/config.ini
+web-common/main/_site/*
+*.hg/

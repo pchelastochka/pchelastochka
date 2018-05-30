@@ -1,0 +1,428 @@
+## simple for weewx - Copyright 2013-2014 Matthew Wall
+## $Id: index.html.tmpl 1123 2014-11-17 19:37:23Z mwall $
+#errorCatcher Echo
+#encoding UTF-8
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head profile="http://www.w3.org/2005/10/profile">
+    <!-- The simple skin for weewx - Copyright 2013-2014 Matthew Wall -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>$station.location Weather</title>
+    <style>
+body {
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: 10pt;
+  background-color: $Extras.BG_COLOR;
+  color: $Extras.FG_COLOR;
+}
+h1 {
+  font-size: 110%;
+}
+h2 {
+  font-size: 100%;
+}
+a:link {
+  text-decoration: none;
+  color: $Extras.LINK_COLOR;
+}
+a:hover {
+  text-decoration: none;
+  color: $Extras.HOVER_COLOR;
+  background-color: $Extras.HOVER_BG_COLOR;
+}
+a:visited {
+  text-decoration: none;
+  color: $Extras.VISITED_COLOR;
+}
+
+#header {
+  clear: both;
+  margin: 0;
+  padding: 0;
+}
+
+#content {
+  clear: both;
+}
+
+#station_info {
+  float: left;
+  line-height: 95%;
+}
+.station_title {
+  font-size: 120%;
+  font-weight: bold;
+}
+.station_location {
+  font-size: 75%;
+}
+.station_time {
+  font-size: 75%;
+}
+
+.data_graphs {
+}
+.data_table {
+  float: right;
+}
+
+#footer {
+  padding-top: 50px;
+}
+#footer table {
+  font-size: 8pt;
+  font-style: italic;
+  color: #aaaaaa;
+}
+#footer td.label {
+  text-align: right;
+}
+
+.metrics_table {
+  font-size: 80%;
+}
+.metric_name {
+  text-align: right;
+  font-weight: bold;
+  font-size: 150%
+}
+.metric_little_name{
+  text-align: right;
+  font-weight: bold;
+  font-size: 120%
+}
+.metric_little_value{
+  text-align: left;
+  padding-left:10px;
+  font-weight: bold;
+  font-size: 120%
+}
+.metric_little_units {
+  text-align: left;
+  font-weight: bold;
+  font-size: 120%;
+  padding-left:10px;
+}
+.metric_value {
+  text-align: left;
+  font-weight: bold;
+  font-size: 150%;
+  padding-left:20px;
+  color: $Extras.LARGE_COLOR;
+}
+.metric_large {
+  text-align: left;
+  font-weight: bold;
+}
+.metric_units {
+  text-align: left;
+  font-weight: bold;
+  font-size: 150%;
+  padding-left:10px;
+  color: $Extras.LARGE_COLOR;
+}
+.hilo_time {
+  text-align: left;
+  padding-left:10px;
+  color: #aaaaaa;
+  font-size: 85%;
+}
+.heatindex {
+  color: $Extras.HEATINDEX_COLOR;
+}
+.windchill {
+  color: $Extras.WINDCHILL_COLOR;
+}
+.table_heading {
+  font-size: 100%;
+  padding-left:10px;
+  color: #888888;
+  border-bottom: 1px solid #cccccc;
+}
+
+.navigation {
+  float: right;
+}
+.period {
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  background-color: $Extras.BG_COLOR;
+  border: 1px solid $Extras.VISITED_COLOR;
+}
+.period_selected {
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  background-color: $Extras.HOVER_BG_COLOR;
+  border: 1px solid $Extras.VISITED_COLOR;
+}
+    </style>
+    <script>
+var periods = ['day','week','month','year'];
+function choose(id) {
+  for(var i=0; i<periods.length; i++) {
+    var c = document.getElementById('control_'+periods[i]);
+    if(c) c.className = (periods[i] == id) ? 'period_selected' : 'period';
+    var g = document.getElementById('graphs_'+periods[i]);
+    if(g) g.style.display = (periods[i] == id) ? 'block' : 'none';
+  }
+}
+    </script>
+  </head>
+
+  <body>
+    <div id='header'>
+      <div id='station_info'>
+        <span class='station_title'>$station.location</span><br/>
+        <span class='station_time'>$current.dateTime</span>
+      </div>
+      <div class='navigation'>
+        <a class='period_selected' id='control_day' onclick="choose('day')">Day</a>
+        <a class='period' id='control_week' onclick="choose('week')">Week</a>
+        <a class='period' id='control_month' onclick="choose('month')">Month</a>
+        <a class='period' id='control_year' onclick="choose('year')">Year</a>
+      </div>
+    </div>
+    <div id='content'>
+      <div class='data_table'>
+
+<!-- current readings in tabular form -->
+
+<table class='metrics_table'>
+  <tr><td>&nbsp;</td></tr>
+
+  <tr style='vertical-align:center'>
+    <td class='metric_name' colspan='2'>TEMPERATURE</td>
+    <td class='metric_value'>$current.outTemp.formatted</td>
+    <td class='metric_units'>$unit.label.outTemp</td>
+  </tr>
+
+  <tr style='vertical-align:center'>
+    <td class='metric_name'>HUMIDITY</td>
+    <td class='metric_value' colspan='2' >$current.outHumidity.formatted</td>
+    <td class='metric_units'>$unit.label.outHumidity</td>
+  </tr>
+
+  <tr style='vertical-align:center'>
+    <td class='metric_name'>WIND SPEED</td>
+    <td class='metric_value' colspan='2' >$current.windSpeed.formatted</td>
+    <td class='metric_units'>$unit.label.windSpeed<td/>
+  </tr>
+
+  <tr style='vertical-align:center'>
+    <td class='metric_name'>WIND DIRECTION</td>
+    <td class='metric_value' colspan='2'>$current.windDir.formatted</td>
+    <td class='metric_units'>$current.windDir.ordinal_compass</td>
+  </tr>
+  
+  <tr style='vertical-align:center'>
+    <td class='metric_name'>RAIN</td>
+    <td class='metric_value' colspan='2' >$hour.deltarain.sum.format('%.1f')</td>
+    <td class='metric_units'>mm</td>
+  </tr>
+
+  <tr style='vertical-align:center'>
+    <td class='metric_name'>GEIGER COUNTER</td>
+    <td class='metric_value' colspan='2' >$hour.geiger.sum.format('%d')</td>
+    <td class='metric_units'>counts</td>
+  </tr>
+
+  <tr style='vertical-align:center'>
+    <td class='metric_name'>ILLUMINANCE</td>
+    <td class='metric_value' colspan='2' >$current.illumination.format('%d')</td>
+    <td class='metric_units'>lux</td>
+  </tr>
+
+  <tr style='vertical-align:center'>
+    <td class='metric_name'>DEVICE TEMPERATURE</td>
+    <td class='metric_value' colspan='2' >$current.inTemp.formatted</td>
+    <td class='metric_units'>$unit.label.outTemp</td>
+  </tr>
+
+</table>
+
+<p>&nbsp;</p>
+
+<!-- hi/lo readings in tabular form -->
+
+<table class='metrics_table'>
+  <tr>
+    <td></td>
+    <td class="table_heading">TODAY</td>
+    <td class="table_heading">MONTH</td>
+    <td class="table_heading">YEAR</td>
+    <td></td>
+  </tr>
+
+  <!-- outside -->
+
+  <tr style='vertical-align:center'>
+    <td class="metric_little_name">High Temperature:</td>
+    <td><span class="metric_little_value">$day.outTemp.max.formatted</span></br>
+      <span class="hilo_time">$day.outTemp.maxtime</span></td>
+    <td><span class="metric_little_value">$month.outTemp.max.formatted</span><br/>
+      <span class="hilo_time">$month.outTemp.maxtime.format('%d/%m/%y')</span></td>
+    <td><span class="metric_little_value">$year.outTemp.max.formatted</span><br/>
+      <span class="hilo_time">$year.outTemp.maxtime.format('%d/%m/%y')</span></td>
+    <td class="metric_little_units">$unit.label.outTemp</td>
+  </tr>
+  <tr style='vertical-align:center'>
+    <td class="metric_little_name">Low Temperature:</td>
+    <td><span class="metric_little_value">$day.outTemp.min.formatted</span><br/>
+      <span class="hilo_time">$day.outTemp.mintime</span></td>
+    <td><span class="metric_little_value">$month.outTemp.min.formatted</span><br/>
+      <span class="hilo_time">$month.outTemp.mintime.format('%d/%m/%y')</span></td>
+    <td><span class="metric_little_value">$year.outTemp.min.formatted</span><br/>
+      <span class="hilo_time">$year.outTemp.mintime.format('%d/%m/%y')</span></td>
+    <td class="metric_little_units">$unit.label.outTemp</td>
+  </tr>
+  <tr style='vertical-align:center'>
+    <td class="metric_little_name">High Humidity:</td>
+    <td><span class="metric_little_value">$day.outHumidity.max.formatted</span><br/>
+      <span class="hilo_time">$day.outHumidity.maxtime</span></td>
+    <td><span class="metric_little_value">$month.outHumidity.max.formatted</span><br/>
+      <span class="hilo_time">$month.outHumidity.maxtime.format('%d/%m/%y')</span></td>
+    <td><span class="metric_little_value">$year.outHumidity.max.formatted</span><br/>
+      <span class="hilo_time">$year.outHumidity.maxtime.format('%d/%m/%y')</span></td>
+    <td class="metric_little_units">$unit.label.outHumidity</td>
+  </tr>
+  <tr style='vertical-align:center'>
+    <td class="metric_little_name">Low Humidity:</td>
+    <td><span class="metric_little_value">$day.outHumidity.min.formatted</span><br/>
+      <span class="hilo_time">$day.outHumidity.mintime</span></td>
+    <td><span class="metric_little_value">$month.outHumidity.min.formatted</span><br/>
+      <span class="hilo_time">$month.outHumidity.mintime.format('%d/%m/%y')</span></td>
+    <td><span class="metric_little_value">$year.outHumidity.min.formatted</span><br/>
+      <span class="hilo_time">$year.outHumidity.mintime.format('%d/%m/%y')</span></td>
+    <td class="metric_little_units">$unit.label.outHumidity</td>
+  </tr>
+  
+  <tr style='vertical-align:center'>
+    <td class="metric_little_name">High Wind Speed:</td>
+    <td><span class="metric_little_value">$day.wind.max.formatted</span><br/>
+      <span class="hilo_time">$day.wind.maxtime</span></td>
+    <td><span class="metric_little_value">$month.wind.max.formatted</span><br/>
+      <span class="hilo_time">$month.wind.maxtime.format('%d/%m/%y')</span></td>
+    <td><span class="metric_little_value">$year.wind.max.formatted</span><br/>
+      <span class="hilo_time">$year.wind.maxtime.format('%d/%m/%y')</span></td>
+    <td class="metric_little_units">$unit.label.wind</td>
+  </tr>
+
+  <!-- total -->
+
+  <tr><td>&nbsp;</td></tr>
+  <tr><td></td><td colspan='3' class='table_heading'>TOTAL</td></tr>
+
+  <tr style='vertical-align:center' padding-top='50'>
+    <td class="metric_little_name">Rain:</td>
+    <td><span class="metric_little_value">$day.deltarain.sum.format('%.1f')</span><br/>
+    <td><span class="metric_little_value">$month.deltarain.sum.format('%.1f')</span><br/>
+    <td><span class="metric_little_value">$year.deltarain.sum.format('%.1f')</span><br/>
+    <td class="metric_little_units">mm</td>
+  </tr>
+
+  <tr style='vertical-align:center'>
+    <td class="metric_little_name">Geiger:</td>
+    <td><span class="metric_little_value">$day.geiger.sum.format('%d')</span><br/></td>
+    <td><span class="metric_little_value">$month.geiger.sum.format('%d')</span></td>
+    <td><span class="metric_little_value">$year.geiger.sum.format('%d')</span></td>
+    <td class="metric_little_units">counts</td>
+  </tr>
+
+  <!-- device -->
+
+  <tr><td>&nbsp;</td></tr>
+  <tr><td></td><td colspan='3' class='table_heading'>DEVICE</td></tr>
+
+  <tr style='vertical-align:center'>
+    <td class="metric_little_name">High Temperature:</td>
+    <td><span class="metric_little_value">$day.inTemp.max.formatted</span><br/>
+      <span class="hilo_time">$day.inTemp.maxtime</span></td>
+    <td><span class="metric_little_value">$month.inTemp.max.formatted</span><br/>
+      <span class="hilo_time">$month.inTemp.maxtime.format('%d/%m/%y')</span></td>
+    <td><span class="metric_little_value">$year.inTemp.max.formatted</span><br/>
+      <span class="hilo_time">$year.inTemp.maxtime.format('%d/%m/%y')</span></td>
+    <td class="metric_little_units">$unit.label.inTemp</td>
+  </tr>
+  <tr style='vertical-align:center'>
+    <td class="metric_little_name">Low Temperature:</td>
+    <td><span class="metric_little_value">$day.inTemp.min.formatted</span><br/>
+      <span class="hilo_time">$day.inTemp.mintime</span></td>
+    <td><span class="metric_little_value">$month.inTemp.min.formatted</span><br/>
+      <span class="hilo_time">$month.inTemp.mintime.format('%d/%m/%y')</span></td>
+    <td><span class="metric_little_value">$year.inTemp.min.formatted</span><br/>
+      <span class="hilo_time">$year.inTemp.mintime.format('%d/%m/%y')</span></td>
+    <td class="metric_little_units">$unit.label.inTemp</td>
+  </tr>
+</table>
+
+<div id='footer'>
+  <table>
+    <tr><td class='label'>station:</td>
+      <td>$station.hardware</td></tr>
+    <tr><td class='label'>server:</td>
+      <td>$station.os_uptime</td></tr>
+    <tr><td class='label'>weewx:</td>
+      <td>$station.uptime</td></tr>
+    <tr><td></td>
+      <td>$station.version</td></tr>
+  </table>
+</div>
+
+      </div>
+
+      <div id='graphs_day' class='data_graphs'>
+        <img src="dayouttemp.png" alt="outtemperature" />
+        <img src="dayouthum.png" alt="humidity" />
+        <img src="daygeiger.png" alt="geiger"/>
+        <img src="daywind.png" alt="wind" />
+        <img src="daywinddir.png" alt="wind direction" />
+        <img src="daywindvec.png" alt="wind vectors" />
+        <img src="dayrain.png" alt="rain" />
+        <img src="dayilluminance.png" alt="illuminance" />
+        <img src="dayintemp.png" alt="intemperature" />
+      </div>
+
+      <div id='graphs_week' class='data_graphs' style='display:none'>
+        <img src="weekouttemp.png" alt="outtemperature" />
+        <img src="weekouthum.png" alt="humidity" />
+        <img src="weekgeiger.png" alt="geiger"/>
+        <img src="weekwind.png" alt="wind" />
+        <img src="weekwinddir.png" alt="wind direction" />
+        <img src="weekwindvec.png" alt="wind vectors" />
+        <img src="weekrain.png" alt="rain" />
+        <img src="weekilluminance.png" alt="illuminance" />
+        <img src="weekintemp.png" alt="intemperature" />
+      </div>
+
+      <div id='graphs_month' class='data_graphs' style='display:none'>
+        <img src="monthintemp.png" alt="intemperature" />
+        <img src="monthouttemp.png" alt="outtemperature" />
+        <img src="monthouthum.png" alt="humidity" />
+        <img src="monthgeiger.png" alt="geiger"/>
+        <img src="monthwind.png" alt="wind" />
+        <img src="monthwinddir.png" alt="wind direction" />
+        <img src="monthwindvec.png" alt="wind vectors" />
+        <img src="monthrain.png" alt="rain" />
+        <img src="monthilluminance.png" alt="illuminance" />
+        <img src="monthintemp.png" alt="intemperature" />
+      </div>
+
+      <div id='graphs_year' class='data_graphs' style='display:none'>
+        <img src="yearouttemp.png" alt="outtemperature" />
+        <img src="yearouthum.png" alt="humidity" />
+        <img src="yeargeiger.png" alt="geiger"/>
+        <img src="yearwind.png" alt="wind" />
+        <img src="yearwinddir.png" alt="wind direction" />
+        <img src="yearwindvec.png" alt="wind vectors" />
+        <img src="yearrain.png" alt="rain" />
+        <img src="yearilluminance.png" alt="illuminance" />
+        <img src="yearintemp.png" alt="intemperature" />
+      </div>
+    </div>
+
+  </body>
+</html>

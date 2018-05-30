@@ -1,0 +1,1 @@
+SERVICES="bee-db bee-grafana common-web swallow-bot swallow-db swallow-weewx"

@@ -1,0 +1,14 @@
+[Unit]
+Description=Pchelastochka Docker-based Engine
+After=network.target docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+User=ws
+WorkingDirectory=/opt/pchelastochka
+ExecStart=/bin/bash start.sh
+ExecStop=/bin/bash stop.sh
+# Restart=always
+[Install]
+WantedBy=multi-user.target
