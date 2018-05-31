@@ -2,34 +2,65 @@
 Docker-based Web Tool For Weather Stations
 
 ### Description
-* swallow-db:
+There are some **services** that run togeter.
+
+* `swallow-db`:
 
 MySQL containter for weather data storing
 
-* swallow-weewx:
+* `swallow-weewx`:
 
 WeeWX-based container with own driver `swallow.py` for getting weather data
 
-* swallow-bot
+* `swallow-bot`:
 
 Telegram bot that that sends current weather data to users
 
-* bee-db
+* `bee-db`:
 
 MySQL containter for weather data storing
 
-* bee-engine
+* `bee-engine`:
 
 python-driver for getting weather data
 
-* bee-grafana
+* `bee-grafana`:
 
 Grafana-based service for visualizing weather data
 
-* web-common
+* `web-common`:
 
 All the web stuff for site
 
 ### Running
-    systemctl start|stop pchelastochka.service
-   
+* run all services:
+
+`systemctl start|stop pchelastochka.service`
+    
+* run certain services:
+```
+cd /opt/pchelastochka
+docker-compose restart <service-name1> <service-name2>
+```    
+* stop certain services:
+
+`docker-compose stop <service-name1> <service-name2>`
+
+### Main Page Customization
+* `web-common/main/_posts/2014-09-21-services-1.markdown`:
+
+This MD-file describes "swallow"
+
+* `web-common/main/_posts/2014-09-21-services-2.markdown`:
+
+This MD-file describes "bee"
+
+* `web-common/main/_posts/2018-01-01-gallery.markdown`:
+
+This file describes gallery.
+
+**How to update pictures?**
+
+Put original images to `web-common/main/img/gallery`. Then, run `misc-tools/prepare_images.sh` to prepare images and update `web-2018-01-01-gallery.markdown`. This scripts crops images, creates thumbnails and inserts images list into `2018-01-01-gallery.markdown`.
+
+**After all manipulations with data in `web-common/main` you have to rebuild static site to generate your changes! Simply run `misc-tools/build_site.sh`.**
