@@ -1,7 +1,7 @@
 # pchelastochka
 Docker-based Web Tool For Weather Stations
 
-### Description
+## Description
 There are some **services** that run togeter.
 
 * `swallow-db`:
@@ -32,7 +32,7 @@ Grafana-based service for visualizing weather data
 
 All the web stuff for site
 
-### Running
+## Running
 * run all services:
 
 `systemctl start|stop pchelastochka.service`
@@ -46,7 +46,7 @@ docker-compose restart <service-name1> <service-name2>
 
 `docker-compose stop <service-name1> <service-name2>`
 
-### Main Page Customization
+## Main Page Customization
 * `web-common/main/_posts/2014-09-21-services-1.markdown`:
 
 This MD-file describes "swallow"
@@ -59,8 +59,9 @@ This MD-file describes "bee"
 
 This file describes gallery.
 
-**How to update pictures?**
+### How to update pictures
 
 Put original images to `web-common/main/img/gallery`. Then, run `misc-tools/prepare_images.sh` to prepare images and update `web-2018-01-01-gallery.markdown`. This scripts crops images, creates thumbnails and inserts images list into `2018-01-01-gallery.markdown`.
 
-**After all manipulations with data in `web-common/main` you have to rebuild static site to generate your changes! Simply run `misc-tools/build_site.sh`.**
+### How to rebuild site?
+After all manipulations with data in `web-common/main` you have to rebuild static site to generate your changes! Simply run `misc-tools/build_site.sh`.
