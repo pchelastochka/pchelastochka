@@ -46,7 +46,7 @@ docker-compose restart <service-name1> <service-name2>
 
 `docker-compose stop <service-name1> <service-name2>`
 
-## Main Page Customization
+## Site Customization
 * `web-common/main/_posts/2014-09-21-services-1.markdown`:
 
 This MD-file describes "swallow"
@@ -58,6 +58,22 @@ This MD-file describes "bee"
 * `web-common/main/_posts/2018-01-01-gallery.markdown`:
 
 This file describes gallery.
+
+* `web-common/main/index.html`:
+
+This file contains page name and subname
+
+* `web-common/main/_config.yml`:
+
+This is main configuration file. There are some options: `url`, `title`, `stations` (links to station diagrams), `social` (different links)
+
+* `web-common/main/_includes/about.html`:
+
+This HTML-file describes *about info*
+
+* `web-common/main/img`:
+
+This directory stores all images (backgrounds, gallery, etc)
 
 ### How to update pictures
 
