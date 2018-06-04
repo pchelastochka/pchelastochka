@@ -77,7 +77,7 @@ This directory stores all images (backgrounds, gallery, etc)
 
 ### How to update pictures
 
-Put original images to `web-common/main/img/gallery`. Then, run `misc-tools/prepare_images.sh` to prepare images and update `web-2018-01-01-gallery.markdown`. This scripts crops images, creates thumbnails and inserts images list into `2018-01-01-gallery.markdown`.
+Put original images to `web-common/main/img/gallery`. Then, run `misc-tools/prepare_images.sh`. This script crops images, creates thumbnails and inserts images list into `2018-01-01-gallery.markdown`.
 
 ### How to rebuild site?
 After all manipulations with data in `web-common/main` you have to rebuild static site to generate your changes! Simply run `misc-tools/build_site.sh`.
